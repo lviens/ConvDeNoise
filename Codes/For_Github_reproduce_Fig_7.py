@@ -92,7 +92,7 @@ t_length_d = int(t_length*delta)
 
 window_stretch = np.arange(t_ini,int(t_length_d))
 
-#%% Compute dv/v from raw SC functions
+#%% Compute dv/v from raw SC functions (need a little bit of preprocessing: remove mean, normalization, and tapering)
 dvxffin = np.empty((2,int(len(SCfunc))))
 ccxffin = np.empty((2,int(len(SCfunc)))) # Set variables
 errorxffin = np.empty((2,int(len(SCfunc))))
@@ -108,11 +108,11 @@ for ii in [0, 1]:
         curd[:6] = curd[:6]*hann[:6]
         curd[-6:] = curd[-6:]*hann[-6:]
     
-        [dvxffin[ii,i], ccxffin[ii,i], Eps ] = stretching_current(ref = refd, cur = curd, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
+        [dvxffin[ii,i], ccxffin[ii,i], Eps ] = stretching_current(ref = refd, cur = curd, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
                                                                   window = window_stretch,t_vec = t_vec )
                                                             
 
-#%%  Compute dv/v from SC functions denoised with SVDWF
+#%%  Compute dv/v from SC functions denoised with SVDWF (need a little bit of preprocessing: remove mean, normalization, and tapering)
 dvwiener = np.zeros((2,int(len(SCfunc))))
 ccwiener = np.zeros((2,int(len(SCfunc)))) # Set variables
 errorwiener = np.zeros((2,int(len(SCfunc))))     
@@ -130,11 +130,11 @@ for ii in [0, 1]:
         curd[:6] = curd[:6]*hann[:6]
         curd[-6:] = curd[-6:]*hann[-6:]
     
-        [dvwiener[ii,i], ccwiener[ii,i], Eps ] = stretching_current(ref = refd, cur = curd, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
+        [dvwiener[ii,i], ccwiener[ii,i], Eps ] = stretching_current(ref = refd, cur = curd, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
                                                                   window = window_stretch,t_vec = t_vec )
                                                               
 
-#%%  Compute dv/v from SC functions denoised with ConvDeNoise    
+#%%  Compute dv/v from SC functions denoised with ConvDeNoise  (need a little bit of preprocessing: remove mean, normalization, and tapering)   
 dv = np.zeros((2,int(len(SCfunc))))
 cc = np.zeros((2,int(len(SCfunc)))) 
 error1 = np.zeros((2,int(len(SCfunc))))      
@@ -153,7 +153,7 @@ for ii in [0, 1]:
         curd[:6] = curd[:6]*hann[:6]
         curd[-6:] = curd[-6:]*hann[-6:]
     
-        [dv[ii,i], cc[ii,i], Eps] = stretching_current(ref = refd, cur = curd, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
+        [dv[ii,i], cc[ii,i], Eps] = stretching_current(ref = refd, cur = curd, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
                                                                   window = window_stretch, t_vec = t_vec )
                                                                   
     
@@ -187,11 +187,20 @@ datepl1 ='2017-09-25'
 datepl2 =  '2017-10-11'
 datozoom = pd.date_range(start=datepl1, end=datepl2,freq='0h20min')
 
-##%% Y-axix and x-axis limits of the plot, can be changed!
+
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+##%% CHANGE xlio1 and xlio2 TO GET THE ZOOM OF FIGURE 8!
+#Y-axix and x-axis limits of the plot, 
 ylio1 = -3
 ylio2 = 3
-xlio1 = datepl1 # Format: '2017-09-25'
+xlio1 = datepl1 # '2017-09-26'
 xlio2 = datepl2 # '2017-10-01'
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+
 
 fig10 = plt.figure(figsize =(9, 9) )
 
