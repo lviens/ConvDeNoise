@@ -17,14 +17,18 @@ We only focus on a short time period in this example (e.g., 16 days) as the enti
 
 ################################################   IMPORTANT  ################################################
 
-                                        The code needs Keras version 2.2.4
+                                        The code uses Keras version 2.2.4
                                         
 ################################################   IMPORTANT  ################################################   
   
 """
 
+#%%
+
 
 from __future__ import division
+
+
 import numpy as np
 from keras.models import load_model
 
