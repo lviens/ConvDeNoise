@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy
 import scipy.signal
 from scipy.signal import butter, filtfilt
@@ -103,4 +102,3 @@ def stretching_current(ref, cur, dvmin, dvmax, nbtrial, window,t_vec):
     
 
     return dv, cc, Eps
-
