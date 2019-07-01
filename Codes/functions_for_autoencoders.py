@@ -11,16 +11,9 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=4):
     low = lowcut / nyq
     high = highcut / nyq
     b, a = butter(order, [low, high], btype='band')
-#    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
     y = filtfilt(b, a, data)
     return y
 
-#def butter_bandpass(lowcut, highcut, fs, order=4):
-#    nyq = 0.5 * fs
-#    low = lowcut / nyq
-#    high = highcut / nyq
-#    b, a = butter(order, [low, high], btype='band')
-#    return b, a
 
 def ncf_denoise(img_to_denoise, mdate, ntau, nsv, nsv_to_rm, use_wiener):
     """
@@ -37,10 +30,6 @@ def ncf_denoise(img_to_denoise, mdate, ntau, nsv, nsv_to_rm, use_wiener):
         nsv = min(np.shape(img_to_denoise))
 
     U, s, V = np.linalg.svd(img_to_denoise)
-#    S = np.zeros((np.shape(img_to_denoise)))
-    # Never know if these indices should be 0 or 1, check
-#    S[:np.shape(img_to_denoise)[1], :np.shape(img_to_denoise)[0]] = np.diag(s)
-
     Xwiener = np.zeros((np.shape(img_to_denoise)))
 
     for kk in np.arange(nsv_to_rm, nsv):
@@ -98,28 +87,16 @@ def stretching_current(ref, cur, t, dvmin, dvmax, nbtrial, window,t_vec):
 
     for j in np.arange(np.shape(Eps)[1]):
         s = np.interp(x=np.ravel(tt), xp=np.ravel(tau[:, j]), fp=cur)
-#        plt.plot(s)
-#        plt.show()
         waveform_ref = ref[window]
         waveform_cur = s[window]
         C[0, j] = np.corrcoef(waveform_ref, waveform_cur)[0, 1]
 
     imax = np.nanargmax(C)
-#    if i<10:
-# =============================================================================
-#     print(imax)
-# =============================================================================
         
     if imax >= np.shape(Eps)[1]-1:
         imax = imax - 1
     if imax <= 2:
         imax = imax + 1
-    # Proceed to the second step to get a more precise dv/v measurement
-#    dtfiner = np.linspace(Eps[0, imax-2], Eps[0, imax+2], 500)
-#    func = scipy.interpolate.interp1d(np.ravel(Eps[0, np.arange(imax-2, imax+2)]), np.ravel(C[0,np.arange(imax-2, imax+2)]), kind='cubic')
-#    CCfiner = func(dtfiner)
-#    cc = np.max(CCfiner) # Find maximum correlation coefficient of the refined  analysis
-#    dv = 100 * dtfiner[np.argmax(CCfiner)] 
     dtfiner = np.linspace(Eps[0, imax-1], Eps[0,imax+1], 500)
     func = scipy.interpolate.interp1d(np.ravel(Eps[0,np.arange(imax-2, imax+2)]), np.ravel(C[0,np.arange(imax-2, imax+2)]), kind='cubic')
     CCfiner = func(dtfiner)
@@ -128,55 +105,3 @@ def stretching_current(ref, cur, t, dvmin, dvmax, nbtrial, window,t_vec):
     
 
     return dv, cc, Eps
-
-
-
-def stretching_current_with_error(ref, cur, t, dvmin, dvmax, nbtrial, window, fmin, fmax, tmin, tmax,t_vec):
-    """
-        Stretching
-    """
-    Eps = np.asmatrix(np.linspace(dvmin, dvmax, nbtrial))
-    L = 1 + Eps
-    tt = np.matrix.transpose(np.asmatrix(t_vec))
-    tau = tt.dot(L)  # stretched/compressed time axis
-    C = np.zeros((1, np.shape(Eps)[1]))
-
-    for j in np.arange(np.shape(Eps)[1]):
-        s = np.interp(x=np.ravel(tt), xp=np.ravel(tau[:, j]), fp=cur)
-#        plt.plot(s)
-#        plt.show()
-        waveform_ref = ref[window]
-        waveform_cur = s[window]
-        C[0, j] = np.corrcoef(waveform_ref, waveform_cur)[0, 1]
-
-    imax = np.nanargmax(C)
-#    if i<10:
-# =============================================================================
-#     print(imax)
-# =============================================================================
-        
-    if imax >= np.shape(Eps)[1]-1:
-        imax = imax - 1
-    if imax <= 2:
-        imax = imax + 1
-    # Proceed to the second step to get a more precise dv/v measurement
-#    dtfiner = np.linspace(Eps[0, imax-2], Eps[0, imax+2], 500)
-#    func = scipy.interpolate.interp1d(np.ravel(Eps[0, np.arange(imax-2, imax+2)]), np.ravel(C[0,np.arange(imax-2, imax+2)]), kind='cubic')
-#    CCfiner = func(dtfiner)
-#    cc = np.max(CCfiner) # Find maximum correlation coefficient of the refined  analysis
-#    dv = 100 * dtfiner[np.argmax(CCfiner)] 
-    dtfiner = np.linspace(Eps[0, imax-1], Eps[0,imax+1], 500)
-    func = scipy.interpolate.interp1d(np.ravel(Eps[0,np.arange(imax-2, imax+2)]), np.ravel(C[0,np.arange(imax-2, imax+2)]), kind='cubic')
-    CCfiner = func(dtfiner)
-    cc = np.max(CCfiner) # Find maximum correlation coefficient of the refined  analysis
-    dv = 100 * dtfiner[np.argmax(CCfiner)] 
-    
-    T = 1 / (fmax - fmin)
-    X = cc
-    wc = np.pi * (fmin + fmax)
-    t1 = np.min([tmin, tmax])
-    t2 = np.max([tmin, tmax])
-    error = 100*(np.sqrt(1-X**2)/(2*X)*np.sqrt((6* np.sqrt(np.pi/2)*T)/(wc**2*(t2**3-t1**3))))
-    return dv, cc, Eps, error
-
-
