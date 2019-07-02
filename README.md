@@ -3,7 +3,7 @@
 * Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:
   - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (submitted to GJI). A preprint will be available soon.
   
-* The encoder and decoder are as follow
+* The autoencoder is composed of an encoder part and a decoder part:
 ![Image of ConvDeNoise](https://github.com/lviens/ConvDeNoise/blob/master/ConvDeNoise_image.png)
 
 
