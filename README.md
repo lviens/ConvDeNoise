@@ -4,7 +4,7 @@
   - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (submitted to GJI). A preprint will be available soon.
   
 * The encoder and decoder are as follow
-![Image of ConvDeNoise](https://github.com/lviens/ConvDeNoise/blob/master/ConvDeNoise.png)
+![Image of ConvDeNoise](https://github.com/lviens/ConvDeNoise/blob/master/ConvDeNoise_image.png)
 
 
 * The **Codes** folder contains 5 files: 
