@@ -13,3 +13,4 @@
   - The **ConvDeNoise_NS7M_station.h5** contains the weights of ConvDeNoise trained for the NS7M station (Requires Keras 2.2.4)
   - The **Test_data.mat** contains 16 days of raw SC functions at the NS7M station, reference waveforms to compute the dv/v,... (e.g., all the data required to reproduce the Figure).
   - The **ConvDeNoise_core.py** file is the convolutional denoising autoencoder main code that was used to compute the **ConvDeNoise_NS7M_station.h5** file (requires the raw SC functions, please email me for the training set, file is too big for Github)
+ 
