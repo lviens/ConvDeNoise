@@ -2,6 +2,10 @@
 
 * Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:
   - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (submitted to GJI). A preprint will be available soon.
+  
+* The encoder and decoder are as follow
+![Image of ConvDeNoise](https://github.com/lviens/ConvDeNoise/blob/master/ConvDeNoise.png)
+
 
 * The **Codes** folder contains 5 files: 
   - The **Reproduce_Fig_7.py** file is the python code to reproduce the figure.
