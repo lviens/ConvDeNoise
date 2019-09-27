@@ -31,9 +31,9 @@ def ncf_denoise(img_to_denoise, mdate, ntau, nsv, nsv_to_rm, use_wiener):
     Inputs:
         - img_to_denoise: the list of NCF. It should be an MxN matrix where M represents the total number of NCF and N the
             length of each NCF
-        - mdate: the size of the Wiener filter in the first dimension (K = 3)
+        - mdate: the size of the Wiener filter in the first dimension (K = 5)
         - ntau: the size of the Wiener filter in the second dimension (L = 5)
-        - nsv: the number of singular values to keep in the SVD filter (25 
+        - nsv: the number of singular values to keep in the SVD filter (25)
     Outputs:
         - denoised_img: the denoised list of NCF
     """
