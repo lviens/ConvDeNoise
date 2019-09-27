@@ -1,10 +1,11 @@
 # ConvDeNoise: A convolutional denoising autoencoder to denoise correlation functions
 
 * **27/09/2019 Edit 1**: Small changes of the input data normalization and architecture: 
-  - The new normalization of the SC functions should be between -1 and 1 (0 and 1 in the 1st version). 
+  - We changed the amplitude normalization of the SC functions between -1 and 1 (0 and 1 in the 1st version). 
   - The new autoencoder only has 4 hidden layers (6 layers in the 1st version). 
-  - The last activation function is the hyperbolic tangent activation function (Sigmoid in the 1st version) to output the denoised SC function amplitudes between -1 and 1. 
-  - These three changes decrease the number of parameters to train for the same level of performance. **A revised version of the pre-print will soon be online.**
+  - The last activation function is the hyperbolic tangent activation (tanH) function to output the denoised SC function amplitudes between -1 and 1 (Sigmoid function in the 1st version). 
+  - These three changes decrease the number of parameters to train for the same level of performance. 
+  - **A revised version of the pre-print will soon be online.**
 
 * **27/09/2019 Edit 2**: About the hyperparameters of ConvDeNoise (**ConvDeNoise_core.py** file):
   - We recommend to set the number of filters (F_nb) to 30 or 40 to denoise SC functions
