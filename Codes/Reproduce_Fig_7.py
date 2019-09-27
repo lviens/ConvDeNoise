@@ -68,7 +68,8 @@ The Test_data.mat matrix contains a dictionary for the data at the NS7M station 
 
 
 #%% Change the fig_choice
-fig_choice = 8 # EITHER 7 or 8
+fig_choice = 7 # EITHER 7 or 8
+
 if fig_choice== 7 or  fig_choice == 8:
     print('Plotting Figure ' + str(fig_choice) )
 else:
