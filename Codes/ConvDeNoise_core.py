@@ -16,14 +16,14 @@ class TimeHistory(keras.callbacks.Callback):
         
         
         
-def ConvDeNoise(x_train, xref_train, x_test, xref_test, output_f='./ConvDeNoise.h5' , F_nb=40, K_sz=130, pool=2, patience_N=20, epoch_nb=200, btch_sz=256):
+def ConvDeNoise(x_train, xref_train, x_test, xref_test, output_f='./ConvDeNoise.h5' , F_nb=40, K_sz=130, pool=2, patience_N=25, epoch_nb=200, btch_sz=256):
     """
         ConvDeNoise: Main function
         - Inputs:
-            - Data:
-                - x_train: Noisy SC functions of the training set, Shape: (nb_of_waveforms (90% of 363 days of SC functions every 20-min: 23515), length_of_signal (1s at 200 Hz), nb_of_channels (Z-E and Z-N SC functions)) -> (23515, 200, 2)
+            - Data: !!!!!! Amplitudes of the SC functions need to be normalized between -1 and 1 !!!!!!
+                - x_train: Noisy SC functions of the training set, Shape: (nb_of_waveforms (80% of 363 days of SC functions every 20-min: 20904), length_of_signal (1s at 200 Hz), nb_of_channels (Z-E and Z-N SC functions)) -> (20904, 200, 2)
                 - xref_train: Clean SC functions of the training set, Shape: same as 'x_train'
-                - x_test: Noisy SC functions of the validation set; Shape: (nb_of_waveforms (10% of 363 days of SC functions every 20-min: 2621), length_of_signal (1s at 200 Hz), nb_of_channels (Z-E and Z-N SC functions)) -> (2621, 200, 2)
+                - x_test: Noisy SC functions of the validation set; Shape: (nb_of_waveforms (20% of 363 days of SC functions every 20-min: 5232), length_of_signal (1s at 200 Hz), nb_of_channels (Z-E and Z-N SC functions)) -> (5232, 200, 2)
                 - xref_test: Clean SC functions of the validation set, Shape: same as 'x_test'
             - 1D convolution operation:
                 - F_nb: filters, dimension of the output space, i.e.,  number of output filters in the convolution (Integer, default: 40)
@@ -31,7 +31,7 @@ def ConvDeNoise(x_train, xref_train, x_test, xref_test, output_f='./ConvDeNoise.
             - MaxPooling1D and UpSampling1D operations:
                 - pool: size of the max pooling windows and Upsampling factor. (Integer, default: 2)
             - Fit:
-                - patience_N: Number of epochs with no improvement of the validation set loss(val_loss) after which training will be stopped. (Integer, default: 20) 
+                - patience_N: Number of epochs with no improvement of the validation set loss(val_loss) after which training will be stopped. (Integer, default: 25) 
                 - epoch_nb: Number of epochs to train the model (Integer, default: 200)
                 - btch_sz: Number of samples per gradient update (Integer, default: 256)
         - Output:
@@ -40,25 +40,21 @@ def ConvDeNoise(x_train, xref_train, x_test, xref_test, output_f='./ConvDeNoise.
     # Input shape
     input_img = Input(shape=(int(x_train.shape[1]),int(x_train.shape[2])) ) 
     
-    # Encoder: Three 1D convolution operations with ReLU activation functions and Max-pooling operations.
+    # Encoder: wo 1D convolution operations with ReLU activation functions and Max-pooling operations.
     x = Conv1D(int(F_nb), int(K_sz), activation = 'relu', padding='same')(input_img)
     x = MaxPooling1D(pool, padding='same')(x)
     x = Conv1D(int(F_nb), int(K_sz/2), activation='relu', padding='same')(x)
     x = MaxPooling1D(pool, padding='same')(x)
-    x = Conv1D(int(F_nb), int(40), activation='relu', padding='same')(x)
-    x = MaxPooling1D(pool, padding='same')(x)
-    
+
     #Bottelneck
             
     # Decoder
     x = Conv1D(int(F_nb), int(20),activation ='relu', padding='same')(x)
     x = UpSampling1D(pool)(x)
-    x = Conv1D(int(F_nb), int(40),activation ='relu', padding='same')(x)
-    x = UpSampling1D(pool)(x)
     x = Conv1D(int(F_nb), int(K_sz/2),activation ='relu', padding='same')(x)
     x = UpSampling1D(pool)(x)
     # Output layer
-    decoded = Conv1D(int(2), K_sz, activation='sigmoid', padding='same')(x)
+    decoded = Conv1D(int(2), K_sz, activation='tanh', padding='same')(x)
     
     #Set the model that includes all layers required in the computation of "decoded" given "input_img".
     autoencoder = Model(input_img, decoded)
