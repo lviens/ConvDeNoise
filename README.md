@@ -19,7 +19,7 @@
 
 
 * The **Codes** folder contains 5 files: 
-  - The **Reproduce_Fig_7.py** file is the python code to reproduce Figure 7.
+  - The **Reproduce_Fig_7.py** file is the python code to reproduce Figures 7 and 8 of the paper (Default: plot Figure 7, simply change "fig_choice = 7" to "fig_choice = 8" (L. 71) to plot Figure 8).
   - The **functions_for_autoencoders.py** file contains functions to bandpass filter the data with a Butterworth filter, denoise the SC functions with the SVDWF method (Moreau et al., 2017), and compute the stretching to retrieve dv/v measurements
   - The **ConvDeNoise_NS7M_station.h5** contains the weights of ConvDeNoise trained for the NS7M station (Requires Keras 2.2.4)
   - The **Test_data.mat** contains 16 days of raw SC functions at the NS7M station, reference waveforms to compute the dv/v,... (e.g., all the data required to reproduce Figure 7).
