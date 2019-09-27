@@ -1,6 +1,10 @@
 # ConvDeNoise: A convolutional denoising autoencoder to denoise correlation functions
 
-* **Edit 27/09/2019**: Small changes of the input data normalization and architecture. The new normalization of the SC functions should be between -1 and 1 (0 and 1 in the 1st version). The new autoencoder only has 4 hidden layers (6 layers in the 1st version). The last activation function is the hyperbolic tangent activation function (Sigmoid in the 1st version) to output the denoised SC function amplitudes between -1 and 1. These three changes decrease the number of parameters to train for the same level of performance. **A revised version of the pre-print will soon be online.**
+* **27/09/2019 Edit 1**: Small changes of the input data normalization and architecture. The new normalization of the SC functions should be between -1 and 1 (0 and 1 in the 1st version). The new autoencoder only has 4 hidden layers (6 layers in the 1st version). The last activation function is the hyperbolic tangent activation function (Sigmoid in the 1st version) to output the denoised SC function amplitudes between -1 and 1. These three changes decrease the number of parameters to train for the same level of performance. **A revised version of the pre-print will soon be online.**
+
+* **27/09/2019 Edit 2**: 
+  - For the **ConvDeNoise_core.py** file: 
+    -- The number of kernel 
 
 * Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:
   - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (submitted to GJI). A preprint (not peer-reviewed) of the paper is available at https://eartharxiv.org/q4m2t/.
