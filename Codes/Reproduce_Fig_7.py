@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 19 17:58:41 2019
+Created on Wed Sept 27 15:13 2019
 This code reproduces Figure 7 (Figure 8 can also be plotted by changing two lines of this code) of the following paper:
     - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (submitted to GJI) 
 The code computes relative velocity changes (dv/v) from single-station correlation (SC) functions calculated at one MeSO-net station in the Tokyo metropolitan area (e.g., the NS7M station).
@@ -13,7 +13,8 @@ dv/v measurements from 3 types of SC functions are calculated:
 The weigths of ConvDeNoise used in this example have been obtained following the procedure detailed in the paper and the ConvDeNoise algorithm can be found at: https://github.com/lviens 
 We only focus on a short time period in this example (e.g., 16 days) as the entire SC function file is too large to be uploaded on Github. 
 
-@author: loic
+@author: Loic Viens
+Questions/Comments -> loicviens@gmail.com
 
 ################################################   IMPORTANT  ################################################
 
@@ -28,7 +29,7 @@ We only focus on a short time period in this example (e.g., 16 days) as the enti
 
 from __future__ import division
 
-
+import sys
 import numpy as np
 from keras.models import load_model
 
@@ -49,9 +50,9 @@ The Test_data.mat matrix contains a dictionary for the data at the NS7M station 
           The SC functions have been filtered between 1 and 20 Hz with a Butterworth filter, tapered, and are normalized between 0 and 1
           
     - 'SC_WIE_NS': 20-min Z-N SC functions after denoising with the SVDWF method from 2017/09/25 to 2017/10/11: (1152, 200) -> (16days every 20 min, 1 s signal with a 200 Hz sampling)
-                   Raw Z-N SC functions have been filtered between 1 and 20 Hz with a Butterworth filter, tapered, and the SVDWF was applied (25 singular values, K = 3, L = 5)
+                   Raw Z-N SC functions have been filtered between 1 and 20 Hz with a Butterworth filter, tapered, and the SVDWF was applied (25 singular values, K = 5, L = 5)
     - 'SC_WIE_EW': 20-min Z-E SC functions after denoising with the SVDWF method from 2017/09/25 to 2017/10/11: (1152, 200) -> (16days every 20 min, 1 s signal with a 200 Hz sampling)
-                   Raw Z-E SC functions have been filtered between 1 and 20 Hz with a Butterworth filter, tapered, and the SVDWF was applied (25 singular values, K = 3, L = 5)
+                   Raw Z-E SC functions have been filtered between 1 and 20 Hz with a Butterworth filter, tapered, and the SVDWF was applied (25 singular values, K = 5, L = 5)
           
     - 'raw_ref_NS':  Reference waveform the Z-N raw SC functions (stack from April 1 to December 31, 2017)
     - 'raw_ref_EW':  Reference waveform the Z-E raw SC functions (stack from April 1 to December 31, 2017)
@@ -66,13 +67,21 @@ The Test_data.mat matrix contains a dictionary for the data at the NS7M station 
 """
 
 
+#%% Change the fig_choice
+fig_choice = 8 # EITHER 7 or 8
+if fig_choice== 7 or  fig_choice == 8:
+    print('Plotting Figure ' + str(fig_choice) )
+else:
+    print(   '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    sys.exit('The fig_choice variable has to be equal to either 7 or 8')
+    
+#%% Load data
+
 dir_ini = './'
-input_data = dir_ini + 'Test_data.mat'
+input_data = dir_ini + 'Test_data_fin.mat'
 data = sio.loadmat(input_data)
 SCfunc = data['SC']
 
-#%%
-print(np.squeeze(data['SC_WIE_NS'] ).shape )
 #%% Load the weights of ConvDeNoise and denoise the SC functions
 autoencoder = load_model(dir_ini + '/ConvDeNoise_NS7M_station.h5')
 Denoised_SCF = autoencoder.predict(SCfunc)
@@ -92,7 +101,7 @@ t_length_d = int(t_length*delta)
 
 window_stretch = np.arange(t_ini,int(t_length_d))
 
-#%% Compute dv/v from raw SC functions (need a little bit of preprocessing: remove mean, normalization, and tapering)
+#%% Compute dv/v from raw SC functions (Pre-processing: removing the mean of each SC function before performing the stretching)   
 dvxffin = np.empty((2,int(len(SCfunc))))
 ccxffin = np.empty((2,int(len(SCfunc)))) # Set variables
 errorxffin = np.empty((2,int(len(SCfunc))))
@@ -104,15 +113,11 @@ for ii in [0, 1]:
     xffin = np.squeeze(SCfunc[:, :,ii] )  
     for i in range(len(xffin)): 
         curd = xffin[i,:] - np.mean(xffin[i,:])
-        curd = curd/np.max(np.abs(curd))
-        curd[:6] = curd[:6]*hann[:6]
-        curd[-6:] = curd[-6:]*hann[-6:]
-    
         [dvxffin[ii,i], ccxffin[ii,i], Eps ] = stretching_current(ref = refd, cur = curd, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
-                                                                  window = window_stretch,t_vec = t_vec )
+                                                                  window = window_stretch, t_vec = t_vec )
                                                             
 
-#%%  Compute dv/v from SC functions denoised with SVDWF (need a little bit of preprocessing: remove mean, normalization, and tapering)
+#%%  Compute dv/v from SC functions denoised with SVDWF (Pre-processing: removing the mean of each SC function before performing the stretching)   
 dvwiener = np.zeros((2,int(len(SCfunc))))
 ccwiener = np.zeros((2,int(len(SCfunc)))) # Set variables
 errorwiener = np.zeros((2,int(len(SCfunc))))     
@@ -125,16 +130,12 @@ for ii in [0, 1]:
         xfb_wiener = np.squeeze(data['SC_WIE_EW'] )  
         
     for i in range(len(xfb_wiener)):
-        curd = xfb_wiener[i] - np.mean(xfb_wiener[i])
-        curd = curd/np.max(np.abs(curd))
-        curd[:6] = curd[:6]*hann[:6]
-        curd[-6:] = curd[-6:]*hann[-6:]
-    
+        curd = xfb_wiener[i] - np.mean(xfb_wiener[i])  
         [dvwiener[ii,i], ccwiener[ii,i], Eps ] = stretching_current(ref = refd, cur = curd, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
-                                                                  window = window_stretch,t_vec = t_vec )
+                                                                  window = window_stretch, t_vec = t_vec )
                                                               
 
-#%%  Compute dv/v from SC functions denoised with ConvDeNoise  (need a little bit of preprocessing: remove mean, normalization, and tapering)   
+#%%  Compute dv/v from SC functions denoised with ConvDeNoise (Pre-processing: removing the mean of each SC function before performing the stretching)   
 dv = np.zeros((2,int(len(SCfunc))))
 cc = np.zeros((2,int(len(SCfunc)))) 
 error1 = np.zeros((2,int(len(SCfunc))))      
@@ -149,10 +150,6 @@ for ii in [0, 1]:
     
     for i in range(len(decoded_imgs_all_sq)):
         curd = decoded_imgs_all_sq[i,:] - np.mean(decoded_imgs_all_sq[i,:])
-        curd = curd/np.max(np.abs(curd))
-        curd[:6] = curd[:6]*hann[:6]
-        curd[-6:] = curd[-6:]*hann[-6:]
-    
         [dv[ii,i], cc[ii,i], Eps] = stretching_current(ref = refd, cur = curd, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = nbtrial,
                                                                   window = window_stretch, t_vec = t_vec )
                                                                   
@@ -178,28 +175,26 @@ for i in np.arange(len(dvxffin[0,:])):
     CCwie30.append((ccwiener[0,i]**3 +   ccwiener[1,i]**3) / (ccwiener[0,i]**2 +ccwiener[1,i]**2))
 
 
-#%% Plot to reproduce figure 7 of the paper
+#%% Plot to reproduce figures 7 of the paper
     
 plt.rcParams.update({'font.size': 9}) 
 
-##%% Set the x-axis for the data, do not change!
+##%% Set the x-axis for the data, do not change it!
 datepl1 ='2017-09-25'
 datepl2 =  '2017-10-11'
 datozoom = pd.date_range(start=datepl1, end=datepl2,freq='0h20min')
 
 
-########################################################################################################################################################################
-########################################################################################################################################################################
-########################################################################################################################################################################
-##%% CHANGE xlio1 and xlio2 TO GET THE ZOOM OF FIGURE 8!
-#Y-axix and x-axis limits of the plot, 
-ylio1 = -3
-ylio2 = 3
-xlio1 = datepl1 # '2017-09-26'
-xlio2 = datepl2 # '2017-10-01'
-########################################################################################################################################################################
-########################################################################################################################################################################
-########################################################################################################################################################################
+if fig_choice == 7:
+    xlio1 = datepl1 
+    xlio2 = datepl2 
+    ylio1 = -3
+    ylio2 = 3
+elif fig_choice == 8:
+    xlio1 = '2017-09-26'
+    xlio2 = '2017-10-01'
+    ylio1 = -2
+    ylio2 = 2
 
 
 fig10 = plt.figure(figsize =(9, 9) )
