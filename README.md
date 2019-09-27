@@ -8,8 +8,8 @@
   - **A revised version of the pre-print will soon be online.**
 
 * **27/09/2019 Edit 2**: About the hyperparameters of ConvDeNoise (**ConvDeNoise_core.py** file):
-  - We recommend to set the number of filters (F_nb) to 30 or 40 to denoise SC functions
-  - We tried different kernel sizes (K_sz) between 100 and 150 and found that this parameter does not really change the results.
+  - We recommend to set the number of filters (F_nb) to 30 or 40 to denoise SC functions.
+  - We tried different kernel sizes (K_sz) between 100 and 150 and found that this parameter does not really impact the denoising performance.
 
 * Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:
   - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (submitted to GJI). A preprint (not peer-reviewed) of the paper is available at https://eartharxiv.org/q4m2t/.
