@@ -12,7 +12,7 @@
   - We tried different kernel sizes (K_sz) between 100 and 150 and found that this parameter does not really impact the denoising performance.
 
 * Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:
-  - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (submitted to GJI). A preprint (not peer-reviewed) of the paper is available at https://eartharxiv.org/q4m2t/.
+  - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (Accepted in GJI). A preprint (not peer-reviewed) of the paper is available at https://eartharxiv.org/q4m2t/.
   
 * The autoencoder is composed of an encoder part and a decoder part:
 ![Image of ConvDeNoise](https://github.com/lviens/ConvDeNoise/blob/master/ConvDeNoise_architecture.png)
