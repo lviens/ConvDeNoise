@@ -13,6 +13,7 @@
 * **27/09/2019, Update 2**: About the hyperparameters of ConvDeNoise (**ConvDeNoise_core.py** file):
   - We recommend to set the number of filters (F_nb) to 30 or 40 to denoise SC functions.
   - We tried different kernel sizes (K_sz) between 100 and 150 and found that this parameter does not really impact the denoising performance.
+  - For more details, see the manuscript and the supplementary material.
 
   
 * The autoencoder is composed of an encoder part and a decoder part:
