@@ -1,7 +1,8 @@
 # ConvDeNoise: A convolutional denoising autoencoder to denoise correlation functions
 
-* **Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:**
-  - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (Accepted in GJI). The first draft of the paper (not peer-reviewed) is available at https://eartharxiv.org/q4m2t/.
+* **07/11/2019  Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:**
+  - Viens L. and Van Houtte C., Denoising ambient seismic field correlation functions with convolutional autoencoders (Accepted in GJI). The accepted paper is available at https://eartharxiv.org/q4m2t/.
+  - The accepted paper incorporates the modifications made of Sept. 27, 2019 (See below)
 
 * **27/09/2019 Update 1**: Small changes of the input data normalization and architecture: 
   - We changed the amplitude normalization of the SC functions between -1 and 1 (0 and 1 in the 1st version). 
