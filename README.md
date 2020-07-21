@@ -1,10 +1,7 @@
 # ConvDeNoise: A convolutional denoising autoencoder to denoise correlation functions
 
 ## Updates:
-* **07/11/2019, Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing two lines of the code) of the following paper:**
-  - [Viens L. and Van Houtte C. (2019) Denoising ambient seismic field correlation functions with convolutional autoencoders Geophysical Journal International, 220, 1521–1535](https://academic.oup.com/gji/article/220/3/1521/5663618?guestAccessKey=f794ef77-e0ce-463d-bb70-c6478aa9ffec)
-  - The published paper incorporates the modifications made on Sept. 27, 2019 (See below)
-
+* **07/11/2019: 
 * **27/09/2019, Update 1**: Small changes of the input data normalization and architecture: 
   - We changed the amplitude normalization of the SC functions between -1 and 1 (0 and 1 in the 1st version). 
   - The new autoencoder only has 4 hidden layers (6 layers in the 1st version). 
@@ -18,6 +15,7 @@
 
   
 ## Description:
+Codes to reproduce Figure 7 (Figure 8 can also be plotted by changing 1 line of the code) of [Viens L. and Van Houtte C. (2019), Denoising ambient seismic field correlation functions with convolutional autoencoders, Geophys. J. Int., 220, 1521–1535](https://academic.oup.com/gji/article/220/3/1521/5663618?guestAccessKey=f794ef77-e0ce-463d-bb70-c6478aa9ffec). Note that the published paper incorporates the modifications made on Sept. 27, 2019 (See above).
 
 * The autoencoder is composed of an encoder part and a decoder part:
 ![Image of ConvDeNoise](https://github.com/lviens/ConvDeNoise/blob/master/ConvDeNoise_architecture.png)
