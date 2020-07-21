@@ -16,6 +16,8 @@
   - For more details, see the manuscript and the supplementary material.
 
   
+# Description
+
 * The autoencoder is composed of an encoder part and a decoder part:
 ![Image of ConvDeNoise](https://github.com/lviens/ConvDeNoise/blob/master/ConvDeNoise_architecture.png)
 
