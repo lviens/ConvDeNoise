@@ -1,4 +1,4 @@
-# ConvDeNoise: A convolutional denoising autoencoder for seismic monitoring [Viens and Van Houtte (2019, GJI)](https://academic.oup.com/gji/article/220/3/1521/5663618?guestAccessKey=f794ef77-e0ce-463d-bb70-c6478aa9ffec)
+# ConvDeNoise: A convolutional denoising autoencoder for seismic monitoring - [Viens and Van Houtte (2019, GJI)](https://academic.oup.com/gji/article/220/3/1521/5663618?guestAccessKey=f794ef77-e0ce-463d-bb70-c6478aa9ffec)
 
 ## Updates:
 * **27/09/2019, Update 2**: About the hyperparameters of ConvDeNoise (**ConvDeNoise_core.py** file):
